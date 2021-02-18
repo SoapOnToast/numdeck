@@ -150,7 +150,6 @@ class overlay_class(wx.Frame,wx.FocusEvent, setup):
 			self.on = False
 		style = ( wx.CLIP_CHILDREN | wx.STAY_ON_TOP | wx.FRAME_NO_TASKBAR | wx.NO_BORDER | wx.FRAME_SHAPED )
 		wx.Frame.__init__(self, None, title="deckn't", style = style)
-		wx.FocusEvent.__init__(self, eventType=wxEVT_SET_FOCUS, id=0)
 		self.panel = wx.Panel(self)
 		self.SetSize((400, 500))
 		self.SetPosition((width, height))
