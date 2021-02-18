@@ -1,9 +1,6 @@
 #GOALS
 ##switch for folder--
 ##clone for the main file--
-##disable keyboard presses while blah blah blah
-##config switch | set decimal to edit mode
-##combine path/hotkey
 ###brought back config
 ###setup github
 
