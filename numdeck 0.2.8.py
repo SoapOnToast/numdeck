@@ -5,7 +5,7 @@
 ##config switch | set decimal to edit mode
 ##combine path/hotkey
 ###brought back config
-
+###setup github
 import wx
 import os
 import subprocess
@@ -97,8 +97,8 @@ class setup():
 		    if CLONE.config('text')[-1] == 'TRUE':
 		        CLONE.config(text='FALSE')
 		    else:
-		        CLONE.config(text='TRUE')	
-		        FOLDER.config(text='FALSE')	        
+		        CLONE.config(text='TRUE')
+		        FOLDER.config(text='FALSE')
 		FOLDER = Button(main, text='', command=toggle)
 		LABEL = Entry(main)
 		HOTKEY = Entry(main)
