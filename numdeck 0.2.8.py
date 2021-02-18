@@ -5,7 +5,8 @@
 ##config switch | set decimal to edit mode
 ##combine path/hotkey
 ###brought back config
-###setup github
+###setup github---
+
 import wx
 import os
 import subprocess
