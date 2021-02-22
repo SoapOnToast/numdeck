@@ -1,11 +1,6 @@
 #GOALS
 ##disable keyboard presses while blah blah blah
-##config switch | set decimal to edit mode
-##change path to an option of file or folder and add browse button
-##change button to toggle button--
-##combine path/hotkey
-###brought back config
-###setup github
+##add path/file configfile
 
 import wx
 import os
