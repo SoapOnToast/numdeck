@@ -23,16 +23,9 @@ from configparser import ConfigParser
 from tkinter import *
 from tkinter.messagebox import *
 from tkinter.filedialog import askopenfilename
-# def browse():
-#     app = wx.App(None)
-#     style = wx.FD_OPEN | wx.FD_FILE_MUST_EXIST
-#     dialog = wx.DirDialog(None, 'Open', style=style)
-#     if dialog.ShowModal() == wx.ID_OK:
-#         path = dialog.GetPath()
-#     else:
-#         path = None
-#     dialog.Destroy()
-#     return path
+from functools import partial
+import easygui
+
 p = pydirectinput
 pl = pyautogui
 numstate = GetKeyState(VK_NUMLOCK)
@@ -87,13 +80,6 @@ class setup():
 					config.read(folder+f"\\{a}")
 					return config.get(num,"LABEL")
 
-
-
-
-
-
-
-
 	def popUp(file,num):
 		main = Tk()
 		main.title(num)
@@ -102,36 +88,46 @@ class setup():
 		Label(main, text = "HOTKEY =").grid(row=2,pady=5,padx=(5,0),sticky=E)
 		Label(main, text = "PATH =").grid(row=3,pady=5,padx=(5,0),sticky=E)
 		config = ConfigParser()
+
+
 		_main = False
 		if 'MAIN.ini' in file:
 			_main = True
-		def toggle():
-		    if FOLDER.config('text')[-1] == 'TRUE':
-		        FOLDER.config(text='FALSE',relief="raised")
-		    else:
-		        FOLDER.config(text='TRUE',relief="sunken")
-		        if _main:
-		        	CLONE.config(text='FALSE',relief="raised")
 
-		def toggleC():
-		    if CLONE.config('text')[-1] == 'TRUE':
-		        CLONE.config(text='FALSE',relief="raised")
-		    else:
-		        CLONE.config(text='TRUE',relief="sunken")
-		        FOLDER.config(text='FALSE',relief="raised")
+		def toggle(self):
+			if self == "FOLDER":
+				if FOLDER.config('text')[-1] == 'TRUE':
+					FOLDER.config(text='FALSE',relief="raised")
+				else:
+					FOLDER.config(text='TRUE',relief="sunken")
+					if _main:
+						CLONE.config(text='FALSE',relief="raised")
+			elif self == "CLONE":
+				if CLONE.config('text')[-1] == 'TRUE':
+					CLONE.config(text='FALSE',relief="raised")
+				else:
+					CLONE.config(text='TRUE',relief="sunken")
+					FOLDER.config(text='FALSE',relief="raised")
+			elif self == "S_FILE":
+				if S_FILE.config('relief')[-1] == 'sunken':
+					S_FILE.config(relief="raised")
+				else:
+					S_FILE.config(relief="sunken")
+					S_DIR.config(relief="raised")
+			elif self == "S_DIR":
+				if S_DIR.config('relief')[-1] == 'sunken':
+					S_DIR.config(relief="raised")
+				else:
+					S_DIR.config(relief="sunken")
+					S_FILE.config(relief="raised")
 
-		def toggleP():
-		    if _FILE.config('text')[-1] == 'TRUE':
-		        DIR.config(text='FALSE',relief="raised")
-		    else:
-		        DIR.config(text='TRUE',relief="sunken")
-		        _FILE.config(text='FALSE',relief="raised")
-
-		FOLDER = Button(main, text='', command=toggle)
+		FOLDER = Button(main, text='', command=partial(toggle,"FOLDER"))
 		LABEL = Entry(main)
 		HOTKEY = Entry(main)
-		PATH = Entry(main)
-
+		S_DIR = Button(main, text='DIR',relief="raised",command=partial(toggle,"S_DIR"),width=4)
+		S_DIR.grid(row=3, column=1,pady=5,sticky=W)
+		S_FILE = Button(main, text='FILE',relief="raised",command=partial(toggle, "S_FILE"),width=4)
+		S_FILE.grid(row=3, column=1,pady=5,sticky=W,padx=(41,0))
 		if ".ini" in file:
 			buttonr= 4
 			config.read(file)
@@ -142,46 +138,43 @@ class setup():
 			if _main:
 				buttonr=5
 				Label(main, text = "CLONE =").grid(row=4,pady=5,padx=(5,0),sticky=E)
-				CLONE = Button(main, text='', command=toggleC)
+				CLONE = Button(main, text='', command=partial(toggle,"CLONE"))
 				if config.get(num,"CLONE") == 'TRUE':
 					CLONE.config(text='TRUE',relief="sunken")
 				else:
 					CLONE.config(text='FALSE',relief="raised")
+
 			LABEL.insert(0,config.get(num,"LABEL"))
 			HOTKEY.insert(0,config.get(num,"HOTKEY"))
-			PATH.insert(0,config.get(num,"PATH"))
-
 		FOLDER.grid(row=0, column=1,pady=5,padx=(0,10),sticky=W)
-		LABEL.grid(row=1, column=1,pady=5,padx=(0,10))
-		HOTKEY.grid(row=2, column=1,pady=5,padx=(0,10))
-		PATH.grid(row=3, column=1,pady=5,padx=(0,10))
-
+		LABEL.grid(row=1, column=1,pady=5,padx=(0,10),sticky=W)
+		HOTKEY.grid(row=2, column=1,pady=5,padx=(0,10),sticky=W)
 		if _main:
 			CLONE.grid(row=4, column=1,pady=5,padx=(0,10),sticky=W)
-
+		def browse():
+			config.read(file)
+			if S_DIR.config('relief')[-1] == "sunken":
+				path = easygui.diropenbox()
+				config.set(num, 'path', path)
+			else:
+				path = easygui.fileopenbox()
+				config.set(num, 'PATH', path)
+			with open(file, 'w') as configfile:
+				config.write(configfile)
 		def setdata():
 			config = ConfigParser()
 			config.read(file)
 			config.set(num, 'FOLDER',FOLDER.cget('text'))
 			config.set(num, 'LABEL', LABEL.get())
 			config.set(num, 'HOTKEY', HOTKEY.get())
-			config.set(num, 'PATH', PATH.get())
-
 			if _main:
 				config.set(num, 'CLONE',CLONE.cget('text'))
 			with open(file, 'w') as configfile:
-   				config.write(configfile)
-
-
+				config.write(configfile)
+		Button(main, text='BROWSE',command=browse).grid(row=3, column=1,pady=5,sticky=W,padx=(82,5))
 		Button(main, text='SET', command=setdata).grid(row=buttonr, column=0, sticky=E, pady=5,padx=5)
 		Button(main, text='EXIT', command=main.destroy).grid(row=buttonr, column=1, sticky=W, pady=5,padx=5)
 		mainloop()
-
-
-
-
-
-
 
 class overlay_class(wx.Frame,wx.FocusEvent, setup):
 	def __init__(self):
@@ -227,8 +220,6 @@ class overlay_class(wx.Frame,wx.FocusEvent, setup):
 		elif setup.edit_mode:
 			setup.popUp(file,num)
 		elif 'TRUE' in folder:
-			print(num)
-			print(_dir)
 			if num in _dir:
 				setup.current_folder.append(setup.current_folder[-1]+'\\'+num)
 				f.set_label()
@@ -245,7 +236,7 @@ class overlay_class(wx.Frame,wx.FocusEvent, setup):
 			setup.popUp(file,num)
 		elif path != '':
 			cwd = Path(path)
-			path = subprocess.Popen(f'C:\\windows\\explorer.exe "{cwd}"')
+			subprocess.Popen(f'C:\\windows\\explorer.exe "{path}"')
 		elif hotkey != '':
 			kb.press_and_release(hotkey)
 	def navigation(num):
