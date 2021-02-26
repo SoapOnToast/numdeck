@@ -1,5 +1,5 @@
 #GOALS
-##disable keyboard presses while blah blah blah
+##disable keyboard presses
 ##add path/file configfile
 
 import wx
@@ -27,7 +27,6 @@ numstate = GetKeyState(VK_NUMLOCK)
 width = int(GetSystemMetrics(0)-450)
 height = int(GetSystemMetrics(1)-550)
 dirs = ['NUM7','NUM8','NUM9','NUM4','NUM5','NUM6','NUM1','NUM2','NUM3','NUM_DIVIDE','NUM_MULTIPLY','NUM_SUBTRACT','NUM_ADD','NUM_DECIMAL','NUM_ENTER','NUM0']
-
 class setup():
 	current_folder = [os.getcwd()+'\\MAIN']
 	edit_mode = False
@@ -74,7 +73,6 @@ class setup():
 				if ".ini" in a:
 					config.read(folder+f"\\{a}")
 					return config.get(num,"LABEL")
-
 	def popUp(file,num):
 		main = Tk()
 		main.title(num)
@@ -83,12 +81,9 @@ class setup():
 		Label(main, text = "HOTKEY =").grid(row=2,pady=5,padx=(5,0),sticky=E)
 		Label(main, text = "PATH =").grid(row=3,pady=5,padx=(5,0),sticky=E)
 		config = ConfigParser()
-
-
 		_main = False
 		if 'MAIN.ini' in file:
 			_main = True
-
 		def toggle(self):
 			if self == "FOLDER":
 				if FOLDER.config('text')[-1] == 'TRUE':
@@ -115,7 +110,6 @@ class setup():
 				else:
 					S_DIR.config(relief="sunken")
 					S_FILE.config(relief="raised")
-
 		FOLDER = Button(main, text='', command=partial(toggle,"FOLDER"))
 		LABEL = Entry(main)
 		HOTKEY = Entry(main)
@@ -138,7 +132,6 @@ class setup():
 					CLONE.config(text='TRUE',relief="sunken")
 				else:
 					CLONE.config(text='FALSE',relief="raised")
-
 			LABEL.insert(0,config.get(num,"LABEL"))
 			HOTKEY.insert(0,config.get(num,"HOTKEY"))
 		FOLDER.grid(row=0, column=1,pady=5,padx=(0,10),sticky=W)
@@ -170,7 +163,6 @@ class setup():
 		Button(main, text='SET', command=setdata).grid(row=buttonr, column=0, sticky=E, pady=5,padx=5)
 		Button(main, text='EXIT', command=main.destroy).grid(row=buttonr, column=1, sticky=W, pady=5,padx=5)
 		mainloop()
-
 class overlay_class(wx.Frame,wx.FocusEvent, setup):
 	def __init__(self):
 		if numstate == 1:
@@ -202,7 +194,6 @@ class overlay_class(wx.Frame,wx.FocusEvent, setup):
 		self.THREE = wx.Button(self.panel, wx.ID_ANY, setup.get_name(setup.current_folder[-1], "NUM3"), pos=(200, 300), size=(100,100))
 		self.ZERO = wx.Button(self.panel, wx.ID_ANY, setup.get_name(setup.current_folder[-1], "NUM0"), pos=(0, 400), size=(200,100))
 		self.buttonVars = [(self.DIVIDE,'NUM_DIVIDE',(100,0)),(self.MULTIPLY, "NUM_MULTIPLY",(200,0)),(self.SUBTRACT, "NUM_SUBTRACT",(300,0)),(self.DECIMAL,"NUM_DECIMAL",(200, 400)),(self.PLUS, "NUM_ADD",(300,100)),(self.ENTER,"NUM_ENTER",(300,300)),(self.SEVEN, "NUM7",(0,100)),(self.EIGHT, "NUM8",(100,100)),(self.NINE, "NUM9",(200, 100)),(self.FOUR, "NUM4",(0, 200)),(self.FIVE, "NUM5",(100, 200)),(self.SIX, "NUM6",(200,200)),(self.ONE, "NUM1",(0,300)),(self.TWO, "NUM2",(100,300)),(self.THREE, "NUM3",(200,300)),(self.ZERO, "NUM0",(0,400))]
-
 	def set_label(self):
 		for a,b,c in self.buttonVars:
 			a.SetLabel(setup.get_name(setup.current_folder[-1], b))
