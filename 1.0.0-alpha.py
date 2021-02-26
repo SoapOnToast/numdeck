@@ -1,8 +1,11 @@
 #GOALS
 ##switch for folder--
 ##clone for the main file--
+##disable keyboard presses while blah blah blah
+##config switch | set decimal to edit mode
+##combine path/hotkey
 ###brought back config
-###setup github
+###setup github---
 
 import wx
 import os
@@ -19,19 +22,7 @@ from pathlib import Path
 from configparser import ConfigParser
 from tkinter import *
 from tkinter.messagebox import *
-from tkinter.filedialog import askopenfilename
-# def get_path():
-#     app = wx.App(None)
-#     style = wx.FD_OPEN | wx.FD_FILE_MUST_EXIST
-#     dialog = wx.DirDialog(None, 'Open', style=style)
-#     if dialog.ShowModal() == wx.ID_OK:
-#         path = dialog.GetPath()
-#     else:
-#         path = None
-#     dialog.Destroy()
-#     return path
-#
-# print(get_path())
+
 p = pydirectinput
 pl = pyautogui
 numstate = GetKeyState(VK_NUMLOCK)
